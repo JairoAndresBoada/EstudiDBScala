@@ -1,0 +1,51 @@
+@import play.api.mvc.MessagesRequestHeader
+@import scala.collection.mutable._
+@(postUrl: Call, formulario : Form[controllers.ParqueaderoForm.ParqueaderoData], listaParqueos: ArrayBuffer[Parqueadero])(implicit request : MessagesRequestHeader)
+
+<html>
+    <head>
+        <title>Software Parqueadero</title>
+    </head>
+    <body>
+
+    <div>
+        @helper.form(postUrl){
+            @helper.CSRF.formField
+            @helper.select(field = formulario("tipo_vehiculo"), options = Seq("2"->"Carro", "1" -> "Moto"))
+            @helper.inputText(formulario("placa"))
+            @helper.inputText(formulario("cilindraje"))
+            <button>Guardar Vehiculo</button>
+
+        }
+
+        @request.flash.data.map{ case (name, value) =>
+        <div>@value</div>
+        }
+
+        <table border="1">
+            <thead>
+                <td>Placa</td>
+                <td>Cilindraje</td>
+                <td>Tipo Vehiculo</td>
+            </thead>
+            <tbody>
+            @for(l <- listaParqueos){
+                <tr>
+                    <td>
+                        @l.placa
+                    </td>
+                    <td>
+                        @l.cilindraje
+                    </td>
+                    <td>
+                        @l.tipo_vehiculo
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+
+    </div>
+    </body>
+
+</html>
